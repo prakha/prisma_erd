@@ -7,14 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id         Int        @id @default(autoincrement())
-  title      String
-  categories Category[]
+model User {
+  id    BigInt  @id @default(autoincrement())
+  posts Post[]  
 }
 
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  posts Post[]
+model Post {
+  id    BigInt  @id @default(autoincrement())
+  users User[]  
 }
