@@ -12,9 +12,10 @@ model User {
   email     String   @unique
   name      String?
   profile   Profile?   @relation(fields: [profileId], references: [id])
-  profileId Int?       // 1-to-1 relationship (optional)
-  posts     Post[]     // 1-to-many relationship
-  groups    Group[]    @relation(references: [id]) // Many-to-many
+  profileId Int?       @unique // Added @unique for 1-to-1
+  posts     Post[]     // 1-to-many
+  groups    Group[]    // Many-to-many (implicit)
+  comments  Comment[]  // Added back relation
   createdAt DateTime @default(now())
 }
 
@@ -22,18 +23,18 @@ model Profile {
   id      Int     @id @default(autoincrement())
   bio     String?
   user    User?      // 1-to-1 back relation
-  image   Image[]    // 1-to-many
+  images  Image[]    // 1-to-many
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   title     String
   content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      // Foreign key
+  published Boolean   @default(false)
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  Int
   comments  Comment[] // 1-to-many
-  tags      Tag[]     @relation(references: [id]) // Many-to-many
+  tags      Tag[]     // Many-to-many (implicit)
 }
 
 model Comment {
@@ -48,13 +49,13 @@ model Comment {
 model Group {
   id      Int    @id @default(autoincrement())
   name    String
-  members User[] @relation(references: [id]) // Many-to-many
+  members User[] // Many-to-many (implicit)
 }
 
 model Tag {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  posts Post[] @relation(references: [id]) // Many-to-many
+  posts Post[] // Many-to-many (implicit)
 }
 
 model Image {
