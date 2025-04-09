@@ -7,14 +7,52 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Post {
-  id         Int        @id @default(autoincrement())
-  title      String
-  categories Category[]
+model Product {
+  code     String    @id @default(uuid()) // Custom primary key as string
+  name     String
+  price    Float
+  categories Category[] // Many-to-many relationship
+  @@map("products") // Optional: maps to "products" table in database
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  posts Post[]
+  code     String    @id @default(uuid()) // Custom primary key as string
+  name     String
+  products Product[] // Many-to-many relationship
+  @@map("categories") // Optional: maps to "categories" table in database
 }
+Alternative Explicit Many-to-Many (if you need additional fields in the join table)
+prisma
+Copy
+// schema.prisma with explicit join table
+model Product {
+  code         String       @id @default(uuid())
+  name         String
+  price        Float
+  categories   ProductCategory[]
+  @@map("products")
+}
+
+model Category {
+  code         String       @id @default(uuid())
+  name         String
+  products     ProductCategory[]
+  @@map("categories")
+}
+
+model Product {
+  code     String    @id @default(uuid()) // Custom primary key as string
+  name     String
+  price    Float
+  categories Category[] // Many-to-many relationship
+  @@map("products") // Optional: maps to "products" table in database
+}
+
+model Category {
+  code     String    @id @default(uuid()) // Custom primary key as string
+  name     String
+  products Product[] // Many-to-many relationship
+  @@map("categories") // Optional: maps to "categories" table in database
+}
+
+
