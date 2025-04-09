@@ -7,21 +7,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-
-model Product {
-  code     String    @id @default(uuid()) // Custom primary key as string
-  name     String
-  price    Float
-  categories Category[] // Many-to-many relationship
-  @@map("products") // Optional: maps to "products" table in database
+model Post {
+  id         Int        @id @default(autoincrement())
+  title      String
+  categories Category[]
 }
 
 model Category {
-  code     String    @id @default(uuid()) // Custom primary key as string
-  name     String
-  products Product[] // Many-to-many relationship
-  @@map("categories") // Optional: maps to "categories" table in database
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
 }
 
 
